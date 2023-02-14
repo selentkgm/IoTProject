@@ -14,11 +14,10 @@ This project is creat to solve one of the biggest problems of our country.
 
 ## Here is the some pictures!
 You can see the picture of the circuit design here.
-
-![image](https://user-images.githubusercontent.com/99405897/218881135-4228b012-9076-4416-a399-59ebb8628bf3.png)
+![tasarim22_13](https://user-images.githubusercontent.com/99405897/218881930-79c001d1-49c2-4d10-b4e4-18915f61e838.png)
 
 You can review the designed site in here.
-![tasarim22_13](https://user-images.githubusercontent.com/99405897/218881930-79c001d1-49c2-4d10-b4e4-18915f61e838.png)
+![image](https://user-images.githubusercontent.com/99405897/218881135-4228b012-9076-4416-a399-59ebb8628bf3.png)
 
 
 ### Contributing
