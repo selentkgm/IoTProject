@@ -8,12 +8,11 @@
 #include <TimeLib.h>
 
 TinyGPSPlus gps;
-SoftwareSerial ss(7, 8);
+SoftwareSerial ss(3, 1);
 
 //Kullanılan değişkenler
 float latitude , longitude;
-String lat_str="41.451727" , lng_str="31.763147";
-String DateString , TimeString;
+String DateString , TimeString, LatitudeString , LongitudeString;
 
 int gaz_pin = A0;
 int Buzzer = D5;
@@ -22,8 +21,8 @@ int led_pin_red = D7; //örnek olarak verdim.
 #define SEALEVELPRESSURE_HPA (1013.25)
 Adafruit_BMP280 bmp;
 
-const char* ssid = "selen";
-const char* password = "****";
+const char* ssid = "MASTERS";
+const char* password = "english123";
 WiFiServer server(80);
 
 void setup() {
@@ -36,7 +35,7 @@ void setup() {
 
   unsigned status;
   status = bmp.begin(0x76);
-  
+
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED)
   {
@@ -52,13 +51,15 @@ void loop() {
   int gazsensorAnalog = analogRead(gaz_pin);
   digitalWrite(led_pin_red, LOW);
 
-  while (ss.available() > 0) { 
-    if (gps.encode(ss.read())) 
+  while (ss.available() > 0) {
+    if (gps.encode(ss.read()))
     {
-      if (gps.location.isValid()) 
+      if (gps.location.isValid())
       {
         latitude = gps.location.lat();
+        LatitudeString = String(latitude , 6);
         longitude = gps.location.lng();
+        LongitudeString = String(longitude , 6);
       }
     }
   }
@@ -82,7 +83,6 @@ void loop() {
     TimeString += '0';
   TimeString += String(secondd);
 
-
   Serial.print("Gaz Sensor: ");
   Serial.print(gazsensorAnalog);
 
@@ -103,31 +103,31 @@ void loop() {
     digitalWrite (Buzzer, HIGH) ;
     digitalWrite(led_pin_red, HIGH);
     delay(1000);
-    digitalWrite (Buzzer, LOW) ;  
+    digitalWrite (Buzzer, LOW) ;
     digitalWrite(led_pin_red, LOW);
   }
 
   else if (bmp.readTemperature() > 10.00) { //Eşik değerler
-    Serial.println("Sıcaklık Yüksek Seviyede!"); 
-    digitalWrite (Buzzer, HIGH) ; 
+    Serial.println("Sıcaklık Yüksek Seviyede!");
+    digitalWrite (Buzzer, HIGH) ;
     digitalWrite(led_pin_red, HIGH);
     delay(1000);
-    digitalWrite (Buzzer, LOW) ; 
+    digitalWrite (Buzzer, LOW) ;
     digitalWrite(led_pin_red, LOW);
   }
 
   else if ( bmp.readPressure() > 1000.00) { //Eşik değerler
-    Serial.println("Basınç Yüksek Seviyede!"); 
+    Serial.println("Basınç Yüksek Seviyede!");
     digitalWrite (Buzzer, HIGH) ;
     digitalWrite(led_pin_red, HIGH);
     delay(1000);
-    digitalWrite (Buzzer, LOW) ; 
+    digitalWrite (Buzzer, LOW) ;
     digitalWrite(led_pin_red, LOW);
   }
 
   else if ( gazsensorAnalog > 3 && bmp.readTemperature() > 10.00) { //Eşik değerler
-    Serial.println("!!!!ACİL DURUM!!!!"); 
-    digitalWrite (Buzzer, HIGH) ; 
+    Serial.println("!!!!ACİL DURUM!!!!");
+    digitalWrite (Buzzer, HIGH) ;
     digitalWrite(led_pin_red, HIGH);
     delay(1000);
   }
@@ -164,9 +164,9 @@ void loop() {
   s += TimeString;
   s += "</td>  </tr> </table> ";
   s += "<p align=center><a style=""color:RED;font-size:125%;"" href=""http://maps.google.com/maps?&z=15&mrt=yp&t=k&q=";
-  s += lat_str;
+  s += LatitudeString;
   s += "+";
-  s += lng_str;
+  s += LongitudeString;
   s += """ target=""_top"">Buraya Tiklayin</a>-Google Haritalar uzerinden konuma ulasabilmek icin tiklayin.</p>";
   s += "</body> </html> \n";
 
